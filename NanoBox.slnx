@@ -1,2 +1,5 @@
 ﻿<Solution>
+  <Project Path="MagicaClothV2.csproj" />
+  <Project Path="MagicaClothV2.Editor.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
 </Solution>
