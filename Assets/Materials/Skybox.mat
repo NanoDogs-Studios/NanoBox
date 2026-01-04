@@ -114,7 +114,7 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _GroundBlend: 1
-    - _HorizonBlend: 15
+    - _HorizonBlend: 8
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
@@ -138,7 +138,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _HorizonColor: {r: 0.3915094, g: 0.7840839, b: 1, a: 1}
-    - _SkyColor: {r: 0.06354574, g: 0.22166784, b: 0.6415094, a: 1}
+    - _SkyColor: {r: 0.08018869, g: 0.332686, b: 1, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _Sun_Color: {r: 11.984315, g: 11.984315, b: 11.984315, a: 1}
     - _Sun_Tiling: {r: 1, g: 1, b: 0, a: 0}
