@@ -39,7 +39,7 @@ namespace Heathen.SteamworksIntegration.API
                 m_FriendsEnumerateFollowingList_t = null;
                 m_FriendsGetFollowerCount_t = null;
                 m_FriendsIsFollowing_t = null;
-                m_SetPersonaNameResponse_t = null;
+               // m_SetPersonaNameResponse_t = null;
                 m_GameConnectedFriendChatMsg_t = null;
                 m_AvatarImageLoaded_t = null;
                 m_PersonaStateChange_t = null;
@@ -119,7 +119,7 @@ namespace Heathen.SteamworksIntegration.API
             /// <summary>
             /// Checks if current user is chat restricted. See <see cref="EUserRestriction"/>
             /// </summary>
-            public static uint Restrictions => SteamFriends.GetUserRestrictions();
+            //public static uint Restrictions => SteamFriends.GetUserRestrictions();
 
             private static GameConnectedFriendChatMsgEvent eventFriendMessageReceived = new GameConnectedFriendChatMsgEvent();
             private static bool listeningForFriendMessages = false;
@@ -135,7 +135,7 @@ namespace Heathen.SteamworksIntegration.API
             private static CallResult<FriendsIsFollowing_t> m_FriendsIsFollowing_t;
 
 
-            private static CallResult<SetPersonaNameResponse_t> m_SetPersonaNameResponse_t;
+            //private static CallResult<SetPersonaNameResponse_t> m_SetPersonaNameResponse_t;
 
             private static Callback<GameConnectedFriendChatMsg_t> m_GameConnectedFriendChatMsg_t;
             private static Callback<AvatarImageLoaded_t> m_AvatarImageLoaded_t;
@@ -738,6 +738,7 @@ namespace Heathen.SteamworksIntegration.API
             /// <param name="enabled"></param>
             /// <returns></returns>
             public static void SetListenForFriendsMessages(bool enabled) => SteamFriends.SetListenForFriendsMessages(enabled);
+#if !UNITY_EDITOR && STEAMWORKS_API_OLD
             /// <summary>
             /// Sets the current user's persona name, stores it on the server and publishes the changes to all friends who are online.
             /// </summary>
@@ -761,6 +762,7 @@ namespace Heathen.SteamworksIntegration.API
                 var handle = SteamFriends.SetPersonaName(name);
                 m_SetPersonaNameResponse_t.Set(handle, callback.Invoke);
             }
+#endif
             /// <summary>
             /// Mark a target user as 'played with'.
             /// </summary>
