@@ -1,0 +1,27 @@
+{
+    "name": "HeathenEngineering.Steamworks",
+    "references": [
+        "PlayerServices.ScriptDefines",
+        "Complete.ScriptDefines",
+        "HeathenEngineering.Core",
+        "HeathenEngineering.Core.Toolbox",
+        "HeathenEngineering.Core.UIX",
+        "Steamworks.NET",
+        "Mirror"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor",
+        "LinuxStandalone64",
+        "macOSStandalone",
+        "WSA",
+        "WindowsStandalone32",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": []
+}

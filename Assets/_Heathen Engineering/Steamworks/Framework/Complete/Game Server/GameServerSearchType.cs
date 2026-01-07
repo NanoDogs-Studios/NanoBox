@@ -1,0 +1,18 @@
+﻿#if !DISABLESTEAMWORKS && HE_STEAMPLAYERSERVICES && HE_STEAMCOMPLETE
+#if MIRROR
+#endif
+
+
+namespace HeathenEngineering.SteamAPI
+{
+    public enum GameServerSearchType
+    {
+        Internet,
+        Friends,
+        Favorites,
+        LAN,
+        Spectator,
+        History
+    }
+}
+#endif
