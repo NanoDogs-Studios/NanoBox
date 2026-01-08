@@ -1,3 +1,4 @@
+using Nanodogs.Nanobox.Core;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -47,6 +48,8 @@ namespace Nanodogs.Nanobox.Map
 
         void Start()
         {
+            player = NanoBoxGameManager.Instance.GetLocalPlayerGameObject().transform;
+
             if (player != null)
             {
                 lastChunk = WorldToChunk(player.position);
