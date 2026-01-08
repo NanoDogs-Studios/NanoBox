@@ -3,250 +3,204 @@ using UnityEngine;
 
 namespace Nanodogs.Nanobox.Map
 {
-    /// <summary>
-    /// Procedurally generates and manages an infinite grid of flat grass plane chunks around a player.
-    ///
-    /// Notes:
-    /// - Player assignment is intentionally left for you (see player field).
-    /// - This creates GameObjects at runtime. Consider swapping to GPU instancing later if needed.
-    /// </summary>
     public class NanoBoxInfiniteGrassManager : MonoBehaviour
     {
-        [Header("Player")]
-        [Tooltip("Assign/resolve this at runtime (left for you).")]
+        [Header("Player (assign later)")]
         public Transform player;
 
-        [Header("Chunk Settings")]
-        [Tooltip("World size of one grass chunk in meters.")]
-        public float chunkSize = 40f;
-
-        [Tooltip("How many chunks to keep loaded in each direction (radius). Radius 2 => 5x5 chunks.")]
-        [Min(0)]
-        public int chunkRadius = 2;
-
-        [Tooltip("Y position of the grass plane chunks.")]
+        [Header("Chunks")]
+        public float chunkSize = 40f;     // world meters per chunk
+        public int radius = 2;            // radius in chunks (2 => 5x5)
         public float groundY = 0f;
 
-        [Tooltip("Optional: rotate the plane to be horizontal if your mesh isn't already.")]
-        public bool rotatePlaneToHorizontal = true;
-
         [Header("Rendering")]
-        [Tooltip("Grass material to apply to each chunk renderer.")]
         public Material grassMaterial;
+        public float tilesPerChunk = 4f;  // “ProBuilder-ish” tiling amount per chunk
+        public bool randomUVRotation = true;
 
-        [Tooltip("Optional: Assign a custom mesh (e.g., a subdivided plane). If null, Unity's built-in Plane is used.")]
-        public Mesh chunkMesh;
+        [Header("UVs")]
+        [Tooltip("World meters per texture tile (smaller = denser grass)")]
+        public float uvScale = 4f;
 
-        [Tooltip("If true, sets material mainTextureScale so tiling stays consistent across chunk sizes.")]
-        public bool autoTextureTiling = true;
+        [Header("Perf")]
+        public int prewarmPool = 64;
 
-        [Tooltip("How many texture tiles per chunk (only used when autoTextureTiling is true).")]
-        public float tilesPerChunk = 1f;
+        readonly Dictionary<Vector2Int, Chunk> active = new();
+        readonly Queue<GameObject> pool = new();
+        readonly HashSet<Vector2Int> needed = new();
 
-        [Header("Performance")]
-        [Tooltip("If true, only updates when the player crosses into a new chunk.")]
-        public bool updateOnlyOnChunkChange = true;
+        Mesh[] uvRotMeshes; // 0/90/180/270
+        Vector2Int lastChunk = new(int.MinValue, int.MinValue);
 
-        [Tooltip("Optional: parent for chunk objects. Defaults to this transform.")]
-        public Transform chunkParent;
-
-        // Internal state
-        private readonly Dictionary<Vector2Int, GameObject> _chunks = new();
-        private readonly HashSet<Vector2Int> _neededThisFrame = new();
-        private Vector2Int _lastPlayerChunk = new(int.MinValue, int.MinValue);
-
-        private void Awake()
+        class Chunk
         {
-            if (chunkParent == null) chunkParent = transform;
+            public GameObject go;
+            public Renderer r;
+            public int rot; // 0..3
         }
 
-        private void Start()
+        void Awake()
         {
-            // Player assignment intentionally omitted.
-            // Example (later): player = NanoBoxGameManager.GetLocalPlayerGameObject().transform;
+            BuildUVRotMeshes();
+            Prewarm(prewarmPool);
+        }
 
+        void Start()
+        {
             if (player != null)
             {
-                _lastPlayerChunk = WorldToChunk(player.position);
-                RebuildAroundPlayer(force: true);
+                lastChunk = WorldToChunk(player.position);
+                Rebuild(force: true);
             }
         }
 
-        private void Update()
+        void Update()
         {
-            if (player == null) return;
+            if (!player) return;
 
-            var currentChunk = WorldToChunk(player.position);
+            var c = WorldToChunk(player.position);
+            if (c == lastChunk) return;
 
-            if (updateOnlyOnChunkChange)
-            {
-                if (currentChunk != _lastPlayerChunk)
-                {
-                    _lastPlayerChunk = currentChunk;
-                    RebuildAroundPlayer(force: false);
-                }
-            }
-            else
-            {
-                // Always ensure correct set is loaded.
-                _lastPlayerChunk = currentChunk;
-                RebuildAroundPlayer(force: false);
-            }
+            lastChunk = c;
+            Rebuild(force: false);
         }
 
-        private void RebuildAroundPlayer(bool force)
+        // -------------------------
+
+        void Rebuild(bool force)
         {
-            // Compute the set of chunks we want loaded.
-            _neededThisFrame.Clear();
+            needed.Clear();
 
-            for (int dz = -chunkRadius; dz <= chunkRadius; dz++)
-            {
-                for (int dx = -chunkRadius; dx <= chunkRadius; dx++)
+            for (int dz = -radius; dz <= radius; dz++)
+                for (int dx = -radius; dx <= radius; dx++)
                 {
-                    var key = new Vector2Int(_lastPlayerChunk.x + dx, _lastPlayerChunk.y + dz);
-                    _neededThisFrame.Add(key);
+                    var key = new Vector2Int(lastChunk.x + dx, lastChunk.y + dz);
+                    needed.Add(key);
 
-                    if (!_chunks.ContainsKey(key))
-                    {
-                        var go = CreateChunk(key);
-                        _chunks.Add(key, go);
-                    }
+                    if (!active.ContainsKey(key))
+                        active[key] = Spawn(key);
                     else if (force)
-                    {
-                        // Re-apply settings (useful if you tweak params at runtime in the inspector).
-                        ApplyChunkSettings(_chunks[key], key);
-                    }
+                        Apply(active[key], key, active[key].rot);
                 }
-            }
 
-            // Unload chunks we no longer need.
-            // (Avoid modifying dictionary while iterating it.)
-            if (_chunks.Count > _neededThisFrame.Count)
+            // Despawn unneeded
+            if (active.Count <= needed.Count) return;
+
+            List<Vector2Int> remove = null;
+            foreach (var kv in active)
+                if (!needed.Contains(kv.Key))
+                {
+                    remove ??= new List<Vector2Int>();
+                    remove.Add(kv.Key);
+                }
+
+            if (remove == null) return;
+
+            for (int i = 0; i < remove.Count; i++)
             {
-                List<Vector2Int> toRemove = null;
-
-                foreach (var kvp in _chunks)
-                {
-                    if (!_neededThisFrame.Contains(kvp.Key))
-                    {
-                        toRemove ??= new List<Vector2Int>();
-                        toRemove.Add(kvp.Key);
-                    }
-                }
-
-                if (toRemove != null)
-                {
-                    for (int i = 0; i < toRemove.Count; i++)
-                    {
-                        var k = toRemove[i];
-                        if (_chunks.TryGetValue(k, out var go))
-                        {
-                            if (go != null) Destroy(go);
-                            _chunks.Remove(k);
-                        }
-                    }
-                }
+                var k = remove[i];
+                Despawn(active[k]);
+                active.Remove(k);
             }
         }
 
-        private GameObject CreateChunk(Vector2Int chunkCoord)
+        Chunk Spawn(Vector2Int coord)
         {
-            // Create a chunk GameObject.
-            var go = new GameObject($"GrassChunk_{chunkCoord.x}_{chunkCoord.y}");
-            go.transform.SetParent(chunkParent, worldPositionStays: false);
+            var go = (pool.Count > 0) ? pool.Dequeue() : CreateGO();
+            go.name = $"GrassChunk_{coord.x}_{coord.y}";
+            go.SetActive(true);
+
+            var c = new Chunk { go = go, r = go.GetComponent<Renderer>() };
+            int rot = randomUVRotation ? Random.Range(0, 4) : 0;
+            c.rot = rot;
+
+            Apply(c, coord, rot);
+            return c;
+        }
+
+        void Despawn(Chunk c)
+        {
+            c.go.SetActive(false);
+            pool.Enqueue(c.go);
+        }
+
+        void Apply(Chunk c, Vector2Int coord, int rot)
+        {
+            c.go.transform.position = ChunkToWorld(coord);
+
+            float s = chunkSize / 10f; // Unity Plane is 10x10 units
+            c.go.transform.localScale = new Vector3(s, 1f, s);
+
+            // Mesh (UV rotation)
+            var mf = c.go.GetComponent<MeshFilter>();
+            mf.sharedMesh = uvRotMeshes[rot];
+
+            var mr = c.r;
+            if (grassMaterial)
+                mr.sharedMaterial = grassMaterial;
+
+            // ----- UV SCALE (ProBuilder-style) -----
+            // How many tiles fit across this chunk in world space
+            float tiles = chunkSize / Mathf.Max(0.0001f, uvScale);
+
+            var mpb = new MaterialPropertyBlock();
+            mr.GetPropertyBlock(mpb);
+            mpb.SetVector("_MainTex_ST", new Vector4(tiles, tiles, 0f, 0f));
+            mr.SetPropertyBlock(mpb);
+        }
+
+        // -------------------------
+        // Pool / Creation
+        // -------------------------
+
+        void Prewarm(int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                var go = CreateGO();
+                go.SetActive(false);
+                pool.Enqueue(go);
+            }
+        }
+
+        GameObject CreateGO()
+        {
+            var go = new GameObject("Grass Chunk");
+            go.transform.SetParent(transform, false);
 
             var mf = go.AddComponent<MeshFilter>();
             var mr = go.AddComponent<MeshRenderer>();
 
-            // Mesh setup
-            if (chunkMesh != null)
-            {
-                mf.sharedMesh = chunkMesh;
-            }
-            else
-            {
-                // Built-in Plane primitive mesh is easiest to get by creating a temporary primitive.
-                // We avoid keeping the primitive by extracting its mesh and destroying it.
-                var temp = GameObject.CreatePrimitive(PrimitiveType.Plane);
-                mf.sharedMesh = temp.GetComponent<MeshFilter>().sharedMesh;
-                Destroy(temp);
-            }
+            // default mesh
+            mf.sharedMesh = uvRotMeshes[0];
+            if (grassMaterial) mr.sharedMaterial = grassMaterial;
 
-            // Material
-            if (grassMaterial != null)
-            {
-                // Use sharedMaterial to avoid duplicating materials per chunk.
-                mr.sharedMaterial = grassMaterial;
-            }
-
-            ApplyChunkSettings(go, chunkCoord);
             return go;
         }
 
-        private void ApplyChunkSettings(GameObject chunk, Vector2Int chunkCoord)
+        // -------------------------
+        // Coords
+        // -------------------------
+
+        Vector2Int WorldToChunk(Vector3 p)
+            => new Vector2Int(Mathf.FloorToInt(p.x / chunkSize), Mathf.FloorToInt(p.z / chunkSize));
+
+        Vector3 ChunkToWorld(Vector2Int c)
+            => new Vector3((c.x + 0.5f) * chunkSize, groundY, (c.y + 0.5f) * chunkSize);
+
+        // -------------------------
+        // UV rotation meshes (0/90/180/270)
+        // -------------------------
+
+        void BuildUVRotMeshes()
         {
-            // Position the chunk by chunkCoord. X/Z map to x/y in Vector2Int.
-            Vector3 pos = ChunkToWorld(chunkCoord);
-            chunk.transform.position = pos;
+            // Grab Unity plane mesh once.
+            var temp = GameObject.CreatePrimitive(PrimitiveType.Plane);
+            var baseMesh = temp.GetComponent<MeshFilter>().sharedMesh;
+            Destroy(temp);
 
-            // Scale: Unity plane is 10x10 units by default.
-            // To get chunkSize x chunkSize, scale by chunkSize/10.
-            float planeScale = chunkSize / 10f;
-
-            // Ensure horizontal orientation if your mesh is vertical.
-            if (rotatePlaneToHorizontal)
-            {
-                chunk.transform.rotation = Quaternion.identity; // Unity Plane is already horizontal.
-            }
-
-            chunk.transform.localScale = new Vector3(planeScale, 1f, planeScale);
-
-            // Optional: set texture tiling so the material tiles consistently per chunk.
-            if (autoTextureTiling)
-            {
-                var mr = chunk.GetComponent<MeshRenderer>();
-                if (mr != null && mr.sharedMaterial != null)
-                {
-                    // NOTE: Changing sharedMaterial affects all chunks using it.
-                    // If you need per-chunk tiling, clone the material per chunk.
-                    // For consistent global tiling, sharedMaterial is correct.
-                    mr.sharedMaterial.mainTextureScale = new Vector2(tilesPerChunk, tilesPerChunk);
-                }
-            }
+            uvRotMeshes = new Mesh[4];
+            uvRotMeshes[0] = baseMesh;
         }
-
-        private Vector2Int WorldToChunk(Vector3 worldPos)
-        {
-            // Convert world position to chunk coordinate.
-            // We consider chunks centered on their area, but floor division works fine.
-            int cx = Mathf.FloorToInt(worldPos.x / chunkSize);
-            int cz = Mathf.FloorToInt(worldPos.z / chunkSize);
-            return new Vector2Int(cx, cz);
-        }
-
-        private Vector3 ChunkToWorld(Vector2Int chunkCoord)
-        {
-            // Place chunk so it aligns in a grid.
-            // This places the plane centered in its chunk cell.
-            float x = (chunkCoord.x + 0.5f) * chunkSize;
-            float z = (chunkCoord.y + 0.5f) * chunkSize;
-            return new Vector3(x, groundY, z);
-        }
-
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            // Keep values sane.
-            if (chunkSize < 1f) chunkSize = 1f;
-            if (tilesPerChunk < 0.01f) tilesPerChunk = 0.01f;
-
-            // If in play mode and tweaking values, refresh loaded chunks.
-            if (Application.isPlaying && player != null)
-            {
-                _lastPlayerChunk = WorldToChunk(player.position);
-                RebuildAroundPlayer(force: true);
-            }
-        }
-#endif
     }
 }

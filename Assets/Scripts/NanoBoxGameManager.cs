@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Nanodogs.Nanobox.Core
@@ -11,6 +12,11 @@ namespace Nanodogs.Nanobox.Core
     /// management within the Unity engine.</remarks>
     public class NanoBoxGameManager : MonoBehaviourPunCallbacks
     {
+        private GameObject localPlayer;
+        private List<GameObject> players = new List<GameObject>();
+
+        GameObject[] spawns;
+
         // Singleton instance
         public static NanoBoxGameManager Instance { get; private set; }
         private void Awake()
@@ -25,9 +31,36 @@ namespace Nanodogs.Nanobox.Core
             {
                 Destroy(gameObject);
             }
+
+            // provides this to nanoboxnetworkmanager
+            spawns = GameObject.FindGameObjectsWithTag("Spawn");
         }
 
         #region Public API
+
+        /// <summary>
+        /// Gets and returns the local player's gameobject.
+        /// </summary>
+        /// <returns>A Player <see cref="GameObject"></see></returns>
+        public GameObject GetLocalPlayerGameObject()
+        { return localPlayer; }
+
+        /// <summary>
+        /// returns the player that is on that view id.
+        /// </summary>
+        /// <param name="viewId">A per-room id that means their index. host is usually 0.</param>
+        /// <returns>A Player <see cref="GameObject"></see></returns>
+        public GameObject GetPlayerGameObjectByViewId(int viewId)
+        { return players[viewId]; }
+
+        /// <summary>
+        /// Returns an array of spawn point game objects used for player or entity placement in the game.
+        /// </summary>
+        /// <returns>An array of <see cref="GameObject"/> instances representing all available spawn points. The array will be
+        /// empty if no spawn points are defined.</returns>
+        public GameObject[] GetSpawnpoints()
+        { return spawns; }
+
 
         public static void SpawnObject(NbObj obj, Vector3 position, Quaternion rotation)
         {
@@ -67,6 +100,14 @@ namespace Nanodogs.Nanobox.Core
             );
         }
 
+        /// <summary>
+        /// Destroys the specified game object across the network using Photon. This ensures that the object is removed
+        /// for all connected players.
+        /// </summary>
+        /// <remarks>This method requires an active Photon Network connection. If the network is not
+        /// connected or if the object is null, the method will not perform any action and will log an error. Only
+        /// objects instantiated via Photon Network should be destroyed using this method.</remarks>
+        /// <param name="obj">The game object to be destroyed. Must not be null and must be managed by Photon Network.</param>
         public static void DestroyObject(GameObject obj)
         {
             if (obj == null)
@@ -85,6 +126,11 @@ namespace Nanodogs.Nanobox.Core
             PhotonNetwork.Destroy(obj);
         }
 
+        /// <summary>
+        /// Sets whether the specified player is allowed to fly.
+        /// </summary>
+        /// <param name="player">The player GameObject whose flying ability will be updated. Cannot be null.</param>
+        /// <param name="canFly">A value indicating whether the player should be able to fly. Set to <see langword="true"></see> to enable flying; otherwise, <see langword="false"></see>.</param>
         public static void SetPlayerFlyState(GameObject player, bool canFly)
         {
             if (player == null)

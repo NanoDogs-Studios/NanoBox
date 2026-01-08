@@ -824,17 +824,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e58f779d658ad54ca134a4cb77b8459, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  player: {fileID: 1571045604}
-  chunkSize: 40
-  chunkRadius: 2
-  groundY: 0
-  rotatePlaneToHorizontal: 1
-  grassMaterial: {fileID: 2100000, guid: dfcc0d510e83bcf45869b0c403a7739a, type: 2}
-  chunkMesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
-  autoTextureTiling: 1
+  player: {fileID: 482303734}
+  chunkSize: 60
+  radius: 2
+  groundY: 1
+  grassMaterial: {fileID: 2100000, guid: d100a0891748f464cb7f58e749136c15, type: 2}
   tilesPerChunk: 1
-  updateOnlyOnChunkChange: 1
-  chunkParent: {fileID: 1571045604}
+  randomUVRotation: 0
+  uvScale: 1
+  prewarmPool: 32
 --- !u!4 &1571045604
 Transform:
   m_ObjectHideFlags: 0
