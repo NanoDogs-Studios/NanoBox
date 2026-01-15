@@ -13,10 +13,18 @@ namespace Nanodogs.Nanobox.Core
     /// NanoBox components.</remarks>
     public class NanoBoxNetworkManager : MonoBehaviour
     {
+        private GameObject LocalPlayerObj => NanoBoxGameManager.Instance.GetLocalPlayerGameObject();
+        private NbPlayer LocalPlayer => NanoBoxGameManager.Instance.GetLocalPlayer();
+
         /// <summary>
         /// the current room
         /// </summary>
         public NbRoom currentnbRoom;
+
+        public void JoinRoom(NbRoom room)
+        {
+            room.currentPlayers.Add(LocalPlayer);
+        }
 
         public void LeaveCurrentRoom()
         {
@@ -46,11 +54,24 @@ namespace Nanodogs.Nanobox.Core
     [System.Serializable]
     public class NbRoom
     {
+        // The Name of the room
         public string roomName;
+
+        // the current host of the room
         public NbPlayer host;
         public List<NbPlayer> currentPlayers = new();
         public NbRoomOptions roomOptions;
         public Room photonRoom;
+
+        public virtual void OnPlayerJoined(NbPlayer player)
+        {
+
+        }
+
+        public void SetHost(NbPlayer newHost)
+        {
+            host = newHost;
+        }
     }
 
     /// <summary>

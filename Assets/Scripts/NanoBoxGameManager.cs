@@ -46,6 +46,14 @@ namespace Nanodogs.Nanobox.Core
         { return localPlayer; }
 
         /// <summary>
+        /// Gets the local player instance associated with the current context.
+        /// </summary>
+        /// <returns>The <see cref="NbPlayer"/> component representing the local player, or <see langword="null"/> if no such
+        /// component is found.</returns>
+        public NbPlayer GetLocalPlayer()
+        { return localPlayer.GetComponent<NbPlayer>(); }
+
+        /// <summary>
         /// returns the player that is on that view id.
         /// </summary>
         /// <param name="viewId">A per-room id that means their index. host is usually 0.</param>
