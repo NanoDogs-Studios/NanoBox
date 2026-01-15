@@ -21,6 +21,13 @@ namespace Nanodogs.Nanobox.Core
         /// </summary>
         public NbRoom currentnbRoom;
 
+        /// <summary>
+        /// Gets the current room information for the room the player is currently in.
+        /// </summary>
+        /// <returns>The <see cref="NbRoom"/> instance representing the current room. Returns <c>null</c> if no room is active.</returns>
+        public NbRoom GetCurrentNbRoom()
+        { return currentnbRoom; }
+
         public void JoinRoom(NbRoom room)
         {
             room.currentPlayers.Add(LocalPlayer);
@@ -49,7 +56,6 @@ namespace Nanodogs.Nanobox.Core
 
     /// <summary>
     /// Defines a NanoBox Room.
-    /// 
     /// </summary>
     [System.Serializable]
     public class NbRoom
