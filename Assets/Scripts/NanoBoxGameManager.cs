@@ -19,6 +19,7 @@ namespace Nanodogs.Nanobox.Core
 
         // Singleton instance
         public static NanoBoxGameManager Instance { get; private set; }
+
         private void Awake()
         {
             // Ensure only one instance of the game manager exists

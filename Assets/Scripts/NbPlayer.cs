@@ -4,9 +4,24 @@ using UnityEngine;
 
 namespace Nanodogs.Nanobox.Core
 {
+    /// <summary>
+    /// Represents a networked player in a Photon multiplayer game session, providing access to player-specific data and
+    /// Photon networking components.
+    /// </summary>
+    /// <remarks>This class encapsulates references to the player's Photon networking objects and associated
+    /// GameObject. It is typically used to manage player state and interactions within a multiplayer environment.
+    /// Instances of this class are created and managed by the game logic to synchronize player data across the
+    /// network.</remarks>
     public class NbPlayer : MonoBehaviourPunCallbacks
     {
         public string username;
+
+        /// <summary>
+        /// Gets a NbPlayer's username.
+        /// </summary>
+        /// <returns></returns>
+        public string GetUsername()
+        { return username; }
         
         // TODO: store player model data
 
