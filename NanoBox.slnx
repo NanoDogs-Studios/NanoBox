@@ -1,10 +1,12 @@
 ﻿<Solution>
+  <Project Path="Obi.csproj" />
   <Project Path="MagicaClothV2.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="Obi.Editor.csproj" />
   <Project Path="PhotonRealtime.csproj" />
   <Project Path="Heathen.Steamworks.csproj" />
   <Project Path="MagicaClothV2.Editor.csproj" />
   <Project Path="PhotonUnityNetworking.Editor.csproj" />
-  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="PhotonUnityNetworking.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="Nanodogs.NanoBox.Scripts.csproj" />
