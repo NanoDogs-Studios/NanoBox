@@ -1,7 +1,7 @@
 ﻿<Solution>
   <Project Path="Obi.csproj" />
-  <Project Path="MagicaClothV2.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="MagicaClothV2.csproj" />
   <Project Path="Obi.Editor.csproj" />
   <Project Path="PhotonRealtime.csproj" />
   <Project Path="Heathen.Steamworks.csproj" />
