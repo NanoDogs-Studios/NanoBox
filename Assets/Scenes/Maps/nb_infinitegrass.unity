@@ -156,7 +156,6 @@ MonoBehaviour:
     paintMaps: []
     rootBones:
     - {fileID: 1770727761959481942}
-    - {fileID: 3751756792241256840}
     connectionMode: 0
     rotationalInterpolation: 0.5
     rootRotation: 0.5
@@ -494,6 +493,9 @@ MonoBehaviour:
     selectionData:
       positions:
       - x: -1.272621
+        y: 3.002518
+        z: -0.3281951
+      - x: -1.272621
         y: 3.0364428
         z: -0.32819498
       - x: -1.272621
@@ -526,24 +528,21 @@ MonoBehaviour:
       - x: -1.272621
         y: 3.3732095
         z: -0.3281951
-      - x: -1.272621
-        y: 3.002518
-        z: -0.3281951
       attributes:
       - Value: 1
-      - Value: 2
-      - Value: 2
-      - Value: 2
-      - Value: 2
-      - Value: 2
-      - Value: 2
-      - Value: 2
-      - Value: 2
-      - Value: 2
-      - Value: 2
       - Value: 1
+      - Value: 1
+      - Value: 2
+      - Value: 2
+      - Value: 2
+      - Value: 2
+      - Value: 2
+      - Value: 2
+      - Value: 2
+      - Value: 2
+      - Value: 2
       maxConnectionDistance: 0.035104275
-      userEdit: 0
+      userEdit: 1
     preBuildData:
       enabled: 0
       buildId: 1e13d460
@@ -557,6 +556,7 @@ MonoBehaviour:
         proxyMesh:
           transformData:
             transformArray:
+            - {fileID: 1770727761959481942}
             - {fileID: 3751756792241256840}
             - {fileID: 2756771151228504849}
             - {fileID: 5326369824317826455}
@@ -568,7 +568,6 @@ MonoBehaviour:
             - {fileID: 853042202438455153}
             - {fileID: 3489914053846216002}
             - {fileID: 2360310320084387861}
-            - {fileID: 1770727761959481942}
             - {fileID: 97514730}
         renderMeshList: []
   gizmoSerializeData:
@@ -633,14 +632,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410087039}
   m_Enabled: 1
-  serializedVersion: 12
+  serializedVersion: 11
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
-  m_CookieSize2D: {x: 10, y: 10}
+  m_CookieSize: 10
   m_Shadows:
     m_Type: 1
     m_Resolution: -1
@@ -809,7 +808,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &482303732
 MonoBehaviour:
@@ -1745,7 +1743,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!23 &2061980674848104764
 MeshRenderer:
@@ -1795,7 +1792,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &2077820032344665770
 GameObject:
@@ -1846,7 +1842,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5326369824317826455}
   m_Layer: 0
-  m_Name: Bone.003
+  m_Name: 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1962,7 +1958,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!4 &2905434029918207078
 Transform:
@@ -1990,7 +1985,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8082096024159978519}
   m_Layer: 0
-  m_Name: Bone.007
+  m_Name: 7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2085,10 +2080,9 @@ SkinnedMeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_MaskInteraction: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 0
+  m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 6239881831769578202, guid: 143a47efe724dcd45a5a3007b3b95f30, type: 3}
   m_Bones:
@@ -2119,7 +2113,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6519776588595147453}
   m_Layer: 0
-  m_Name: Bone.008
+  m_Name: 8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2261,7 +2255,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3489914053846216002}
   m_Layer: 0
-  m_Name: Bone.010
+  m_Name: 10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2277,7 +2271,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3751756792241256840}
   m_Layer: 0
-  m_Name: Bone.001
+  m_Name: 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2362,7 +2356,6 @@ SkinnedMeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_MaskInteraction: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -2450,7 +2443,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!4 &4723049379980457087
 Transform:
@@ -2527,7 +2519,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5128136348324372174}
   m_Layer: 0
-  m_Name: Bone.004
+  m_Name: 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2575,7 +2567,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2360310320084387861}
   m_Layer: 0
-  m_Name: Bone.010_end
+  m_Name: 10_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2609,7 +2601,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3183861891797142397}
   m_Layer: 0
-  m_Name: Bone.005
+  m_Name: 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2662,7 +2654,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &5979980750974655295
 GameObject:
@@ -2728,7 +2719,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &6148731764681989319
 GameObject:
@@ -2740,7 +2730,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1770727761959481942}
   m_Layer: 0
-  m_Name: Bone
+  m_Name: 0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2875,7 +2865,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &6884983223139649690
 GameObject:
@@ -2940,7 +2929,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!4 &7168190609285516787
 Transform:
@@ -2998,7 +2986,7 @@ GameObject:
   m_Component:
   - component: {fileID: 853042202438455153}
   m_Layer: 0
-  m_Name: Bone.009
+  m_Name: 9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3174,7 +3162,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2756771151228504849}
   m_Layer: 0
-  m_Name: Bone.002
+  m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3190,7 +3178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7168190609285516787}
   m_Layer: 0
-  m_Name: Bone.006
+  m_Name: 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3275,7 +3263,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!4 &8996255554623707999
 Transform:
