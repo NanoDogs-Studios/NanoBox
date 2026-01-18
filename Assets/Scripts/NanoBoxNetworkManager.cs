@@ -11,10 +11,58 @@ namespace Nanodogs.Nanobox.Core
     /// <remarks>This class should be attached to a GameObject in the Unity Editor to enable network-related
     /// features for NanoBox. It is intended to be used as part of the NanoBox system and may interact with other
     /// NanoBox components.</remarks>
-    public class NanoBoxNetworkManager : MonoBehaviour
+    public class NanoBoxNetworkManager : MonoBehaviourPunCallbacks
     {
         private GameObject LocalPlayerObj => NanoBoxGameManager.Instance.GetLocalPlayerGameObject();
         private NbPlayer LocalPlayer => NanoBoxGameManager.Instance.GetLocalPlayer();
+
+        [SerializeField] bool testing = false;
+
+        private void Start()
+        {
+            if (!PhotonNetwork.IsConnected)
+            {
+                PhotonNetwork.NickName = LocalPlayer.username;
+                PhotonNetwork.ConnectUsingSettings();
+            }
+        }
+
+        public override void OnConnectedToMaster()
+        {
+            Debug.Log("Connected to Photon Master");
+
+            PhotonNetwork.JoinLobby();
+        }
+
+        public override void OnJoinedLobby()
+        {
+            Debug.Log("Joined Lobby");
+
+            if (!testing) return;
+
+            NbRoom testRoom = new()
+            {
+                roomName = "test",
+                roomOptions = new NbRoomOptions
+                {
+                    maxPlayers = 4,
+                    joinType = NbRoomOptions.RoomJoinType.Friends
+                }
+            };
+
+            CreateRoom(testRoom);
+        }
+
+        public override void OnCreateRoomFailed(short returnCode, string message)
+        {
+            Debug.LogError($"CreateRoom failed: {message} ({returnCode})");
+        }
+
+        public override void OnJoinRoomFailed(short returnCode, string message)
+        {
+            Debug.LogError($"JoinRoom failed: {message} ({returnCode})");
+        }
+
 
         /// <summary>
         /// the current room
@@ -30,7 +78,36 @@ namespace Nanodogs.Nanobox.Core
 
         public void JoinRoom(NbRoom room)
         {
-            room.currentPlayers.Add(LocalPlayer);
+            if (!PhotonNetwork.IsConnected)
+            {
+                Debug.LogWarning("Not connected to Photon.");
+                return;
+            }
+
+            PhotonNetwork.JoinRoom(room.roomName);
+        }
+
+        public void CreateRoom(NbRoom room)
+        {
+            var options = new RoomOptions
+            {
+                MaxPlayers = (byte)room.roomOptions.maxPlayers,
+                IsVisible = room.roomOptions.joinType == NbRoomOptions.RoomJoinType.Public,
+                IsOpen = true,
+                CustomRoomProperties = new ExitGames.Client.Photon.Hashtable
+            {
+            { "joinType", (int)room.roomOptions.joinType }
+            },
+                CustomRoomPropertiesForLobby = new[] { "joinType" }
+            };
+
+            PhotonNetwork.CreateRoom(room.roomName, options);
+        }
+
+        public void RequestHost(NbPlayer player)
+        {
+            if (!PhotonNetwork.IsMasterClient) return;
+            PhotonNetwork.SetMasterClient(player.photonPlayer);
         }
 
         public void LeaveCurrentRoom()
@@ -43,15 +120,59 @@ namespace Nanodogs.Nanobox.Core
             Debug.Log("Left the current room.");
         }
 
-        public void SetHost(NbPlayer player)
+        private void RebuildPlayerList()
         {
-            if(!PhotonNetwork.IsMasterClient && PhotonNetwork.IsConnected)
-            { return; }
+            currentnbRoom.currentPlayers.Clear();
 
-            currentnbRoom.host = player;
-            currentnbRoom.photonRoom.SetMasterClient(player.photonPlayer);
-            Debug.Log($"Set {player.username} as the new host.");
+            foreach (var photonPlayer in PhotonNetwork.PlayerList)
+            {
+                var nbPlayer = NbPlayer.FromPhotonPlayer(photonPlayer);
+                currentnbRoom.currentPlayers.Add(nbPlayer);
+            }
         }
+
+        #region Callbacks
+
+        public override void OnJoinedRoom()
+        {
+            Debug.Log("Joined Photon room.");
+
+            currentnbRoom = new NbRoom
+            {
+                roomName = PhotonNetwork.CurrentRoom.Name,
+                photonRoom = PhotonNetwork.CurrentRoom,
+                currentPlayers = new List<NbPlayer>()
+            };
+
+            RebuildPlayerList();
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                currentnbRoom.host = LocalPlayer;
+            }
+        }
+
+        public override void OnPlayerEnteredRoom(Player newPlayer)
+        {
+            RebuildPlayerList();
+            currentnbRoom.OnPlayerJoined(
+                NbPlayer.FromPhotonPlayer(newPlayer)
+            );
+        }
+
+        public override void OnPlayerLeftRoom(Player otherPlayer)
+        {
+            RebuildPlayerList();
+        }
+
+        public override void OnMasterClientSwitched(Player newMasterClient)
+        {
+            currentnbRoom.host = NbPlayer.FromPhotonPlayer(newMasterClient);
+            Debug.Log($"{currentnbRoom.host.username} is now host.");
+        }
+        #endregion
+
+
     }
 
     /// <summary>
@@ -60,10 +181,7 @@ namespace Nanodogs.Nanobox.Core
     [System.Serializable]
     public class NbRoom
     {
-        // The Name of the room
         public string roomName;
-
-        // the current host of the room
         public NbPlayer host;
         public List<NbPlayer> currentPlayers = new();
         public NbRoomOptions roomOptions;
@@ -71,12 +189,7 @@ namespace Nanodogs.Nanobox.Core
 
         public virtual void OnPlayerJoined(NbPlayer player)
         {
-
-        }
-
-        public void SetHost(NbPlayer newHost)
-        {
-            host = newHost;
+            Debug.Log($"{player.username} joined {roomName}");
         }
     }
 
@@ -91,6 +204,8 @@ namespace Nanodogs.Nanobox.Core
     public class NbRoomOptions
     {
         public int maxPlayers;
+
+        public RoomJoinType joinType;
         public enum RoomJoinType
         {
             Private, // practically a single-player room.

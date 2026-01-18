@@ -28,5 +28,14 @@ namespace Nanodogs.Nanobox.Core
         public PhotonView pv;
         public GameObject playerObject;
         public Player photonPlayer;
+
+        public static NbPlayer FromPhotonPlayer(Player p)
+        {
+            return new NbPlayer
+            {
+                photonPlayer = p,
+                username = p.NickName
+            };
+        }
     }
 }

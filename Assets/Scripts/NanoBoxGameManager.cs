@@ -13,6 +13,8 @@ namespace Nanodogs.Nanobox.Core
     public class NanoBoxGameManager : MonoBehaviourPunCallbacks
     {
         private GameObject localPlayer;
+
+        // all players present in the scene.
         private List<GameObject> players = new List<GameObject>();
 
         GameObject[] spawns;
