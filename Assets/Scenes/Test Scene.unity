@@ -3558,6 +3558,8 @@ MonoBehaviour:
   ObjPool:
   - NanoBoxScriptableObject: {fileID: 11400000, guid: 819e544c1a945104bb22430e1e5f21bb, type: 2}
     prefabName: Objects/Crate
+  - NanoBoxScriptableObject: {fileID: 11400000, guid: 7281ff4ea2a3d054b8f624a374739b7d, type: 2}
+    prefabName: Objects/Barrel
 --- !u!1 &1200446016
 GameObject:
   m_ObjectHideFlags: 0
@@ -6298,6 +6300,67 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.0082684755, y: 3.3473837, z: 0.008130074}
     m_Extent: {x: 0.14164552, y: 3.337302, z: 0.16355813}
   m_DirtyAABB: 0
+--- !u!1001 &566698877843380917
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 880335091003002563, guid: 479cda983ed64034c8fe2742eb328a2e, type: 3}
+      propertyPath: sceneViewId
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 971729765681518138, guid: 479cda983ed64034c8fe2742eb328a2e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3.84
+      objectReference: {fileID: 0}
+    - target: {fileID: 971729765681518138, guid: 479cda983ed64034c8fe2742eb328a2e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 971729765681518138, guid: 479cda983ed64034c8fe2742eb328a2e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -20.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 971729765681518138, guid: 479cda983ed64034c8fe2742eb328a2e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071067
+      objectReference: {fileID: 0}
+    - target: {fileID: 971729765681518138, guid: 479cda983ed64034c8fe2742eb328a2e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 971729765681518138, guid: 479cda983ed64034c8fe2742eb328a2e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 971729765681518138, guid: 479cda983ed64034c8fe2742eb328a2e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 971729765681518138, guid: 479cda983ed64034c8fe2742eb328a2e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 971729765681518138, guid: 479cda983ed64034c8fe2742eb328a2e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 971729765681518138, guid: 479cda983ed64034c8fe2742eb328a2e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3923926387173444331, guid: 479cda983ed64034c8fe2742eb328a2e, type: 3}
+      propertyPath: m_Name
+      value: Barrel
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 479cda983ed64034c8fe2742eb328a2e, type: 3}
 --- !u!1001 &1579261636528204025
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6454,3 +6517,4 @@ SceneRoots:
   - {fileID: 1928505229}
   - {fileID: 986246280}
   - {fileID: 2020345925}
+  - {fileID: 566698877843380917}
