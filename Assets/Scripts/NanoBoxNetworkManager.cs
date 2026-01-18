@@ -1,7 +1,9 @@
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Nanodogs.Nanobox.Core
 {
@@ -18,11 +20,24 @@ namespace Nanodogs.Nanobox.Core
 
         [SerializeField] bool testing = false;
 
+        public UnityEvent onConnectedToPhoton;
+        public UnityEvent onDisconnectedToPhoton;
+
+        public UnityEvent onLobbyJoined;
+        public UnityEvent onLobbyLeft;
+
+        public UnityEvent onRoomJoined;
+        public UnityEvent onRoomLeft;
+        public UnityEvent onRoomCreated;
+
+        public UnityEvent<NbPlayer> onPlayerJoined;
+        public UnityEvent<NbPlayer> onPlayerLeft;
+
         private void Start()
         {
             if (!PhotonNetwork.IsConnected)
             {
-                PhotonNetwork.NickName = LocalPlayer.username;
+                PhotonNetwork.NickName = "Connecting...";
                 PhotonNetwork.ConnectUsingSettings();
             }
         }
@@ -31,12 +46,16 @@ namespace Nanodogs.Nanobox.Core
         {
             Debug.Log("Connected to Photon Master");
 
+            onConnectedToPhoton.Invoke();
+
             PhotonNetwork.JoinLobby();
         }
 
         public override void OnJoinedLobby()
         {
             Debug.Log("Joined Lobby");
+
+            onLobbyJoined.Invoke();
 
             if (!testing) return;
 
@@ -104,6 +123,18 @@ namespace Nanodogs.Nanobox.Core
             PhotonNetwork.CreateRoom(room.roomName, options);
         }
 
+        public void JoinOrCreateRoom(NbRoom room)
+        {
+            var options = new RoomOptions
+            {
+                MaxPlayers = (byte)room.roomOptions.maxPlayers,
+                IsVisible = room.roomOptions.joinType == NbRoomOptions.RoomJoinType.Public,
+                IsOpen = true
+            };
+
+            PhotonNetwork.JoinOrCreateRoom(room.roomName, options, TypedLobby.Default);
+        }
+
         public void RequestHost(NbPlayer player)
         {
             if (!PhotonNetwork.IsMasterClient) return;
@@ -133,9 +164,24 @@ namespace Nanodogs.Nanobox.Core
 
         #region Callbacks
 
+        public override void OnCreatedRoom()
+        {
+            Debug.Log("Room successfully created.");
+
+            onRoomCreated.Invoke();
+        }
+
         public override void OnJoinedRoom()
         {
             Debug.Log("Joined Photon room.");
+            onRoomJoined.Invoke();
+
+            // Create local NbPlayer FROM Photon
+            var localPhotonPlayer = PhotonNetwork.LocalPlayer;
+
+            var nbPlayer = NbPlayer.CreateLocal(localPhotonPlayer);
+
+            NanoBoxGameManager.Instance.RegisterLocalPlayer(nbPlayer);
 
             currentnbRoom = new NbRoom
             {
@@ -148,7 +194,7 @@ namespace Nanodogs.Nanobox.Core
 
             if (PhotonNetwork.IsMasterClient)
             {
-                currentnbRoom.host = LocalPlayer;
+                currentnbRoom.host = nbPlayer;
             }
         }
 
@@ -158,11 +204,15 @@ namespace Nanodogs.Nanobox.Core
             currentnbRoom.OnPlayerJoined(
                 NbPlayer.FromPhotonPlayer(newPlayer)
             );
+
+            onPlayerJoined.Invoke(NbPlayer.FromPhotonPlayer(newPlayer));
         }
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
             RebuildPlayerList();
+
+            onPlayerLeft.Invoke(NbPlayer.FromPhotonPlayer(otherPlayer));
         }
 
         public override void OnMasterClientSwitched(Player newMasterClient)

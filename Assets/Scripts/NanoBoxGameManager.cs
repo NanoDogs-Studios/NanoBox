@@ -72,6 +72,15 @@ namespace Nanodogs.Nanobox.Core
         public GameObject[] GetSpawnpoints()
         { return spawns; }
 
+        public GameObject PickRandomNonOccupiedSpawn()
+        {
+            int rand = Random.Range(0, spawns.Length);
+            GameObject predictedSpawn = GetSpawnpoints()[rand];
+
+            // TODO: pick non-occupied spawn
+            return predictedSpawn;
+        }
+
 
         public static void SpawnObject(NbObj obj, Vector3 position, Quaternion rotation)
         {
@@ -93,7 +102,7 @@ namespace Nanodogs.Nanobox.Core
                 return;
             }
 
-            if(Resources.Load<GameObject>(obj.NanoBoxScriptableObject.ObjName) == null)
+            if (Resources.Load<GameObject>(obj.NanoBoxScriptableObject.ObjName) == null)
             {
                 Debug.LogError($"Prefab '{obj.NanoBoxScriptableObject.ObjName}' not found in Resources. Cannot spawn object.");
                 return;
@@ -164,5 +173,10 @@ namespace Nanodogs.Nanobox.Core
         }
 
         #endregion
+
+        public void RegisterLocalPlayer(NbPlayer player)
+        {
+            localPlayer = player.playerObject;
+        }
     }
 }

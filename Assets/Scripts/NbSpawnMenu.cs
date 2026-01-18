@@ -64,6 +64,11 @@ namespace Nanodogs.Nanobox.UI
             Sprite render = obj.GenerateRender();
 
             GameObject itemUi = Instantiate(itemPrefab, content);
+            
+            Button button = itemUi.GetOrAddComponent<Button>();
+            button.onClick.AddListener(() => {
+                obj.Spawn(Camera.main.transform.forward * 5f, Quaternion.identity);
+            });
 
             TMP_Text text = itemUi.GetComponentInChildren<TMP_Text>();
             Image image = itemUi.GetComponent<Image>();

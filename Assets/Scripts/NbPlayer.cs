@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Nanodogs.Nanobox.Core
 {
     /// <summary>
-    /// Represents a networked player in a Photon multiplayer game session, providing access to player-specific data and
+    /// Represents a networkecomponentsd player in a Photon multiplayer game session, providing access to player-specific data and
     /// Photon networking components.
     /// </summary>
     /// <remarks>This class encapsulates references to the player's Photon networking objects and associated
@@ -28,6 +28,20 @@ namespace Nanodogs.Nanobox.Core
         public PhotonView pv;
         public GameObject playerObject;
         public Player photonPlayer;
+        public int actorNumber;
+        public bool isLocal;
+
+        public static NbPlayer CreateLocal(Player photonPlayer)
+        {
+            return new NbPlayer
+            {
+                username = photonPlayer.NickName,
+                photonPlayer = photonPlayer,
+                actorNumber = photonPlayer.ActorNumber,
+                isLocal = true
+            };
+        }
+
 
         public static NbPlayer FromPhotonPlayer(Player p)
         {
