@@ -1726,6 +1726,7 @@ GameObject:
   - component: {fileID: 2519645110377238078}
   - component: {fileID: 912573909870045886}
   - component: {fileID: 5003405869467637440}
+  - component: {fileID: 5963446541090465326}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2120,6 +2121,44 @@ MonoBehaviour:
   currentInventoryIndex: 0
   equipped: {fileID: 0}
   arms: {fileID: 0}
+--- !u!114 &5963446541090465326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6837369296020968751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33a730fc44ac90944aa0d81cef4f50ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  tabAction:
+    m_Name: Tab
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 9bc5bc2e-fe24-4182-b1af-bc437b1b5fb5
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 47d11f58-93cc-47fc-9e77-4b70d49a411b
+      m_Path: <Keyboard>/tab
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Tab
+      m_Flags: 0
+    - m_Name: 
+      m_Id: ef794217-44e7-470c-afa8-dfb2482c8ea1
+      m_Path: <Gamepad>/buttonWest
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Tab
+      m_Flags: 0
+    m_Flags: 0
+  spawnMenu: {fileID: 0}
 --- !u!1 &7193760123960702973
 GameObject:
   m_ObjectHideFlags: 0
