@@ -232,9 +232,15 @@ namespace Nanodogs.Nanobox.Core
     public class NbRoom
     {
         public string roomName;
+
+        // The host of the room.
         public NbPlayer host;
+
+        // all players in the room.
         public List<NbPlayer> currentPlayers = new();
+
         public NbRoomOptions roomOptions;
+
         public Room photonRoom;
 
         public virtual void OnPlayerJoined(NbPlayer player)
@@ -256,6 +262,7 @@ namespace Nanodogs.Nanobox.Core
         public int maxPlayers;
 
         public RoomJoinType joinType;
+
         public enum RoomJoinType
         {
             Private, // practically a single-player room.
