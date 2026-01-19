@@ -19,7 +19,7 @@ namespace Nanodogs.Nanobox.Core
         /// <summary>
         /// Gets a NbPlayer's username.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A string containing the player's username.</returns>
         public string GetUsername()
         { return username; }
         

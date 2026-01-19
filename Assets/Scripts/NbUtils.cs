@@ -5,8 +5,17 @@ using UnityEngine;
 
 namespace Nanodogs.Nanobox
 {
+    /// <summary>
+    /// Provides Utilites to NanoBox Developers and Modders.
+    /// </summary>
     public static class NbUtils
     {
+        /// <summary>
+        /// If a GameObject is null, IfNullFind attempts to find it.
+        /// </summary>
+        /// <param name="obj">GameObject that is being checked</param>
+        /// <param name="objPath">The path to the object, with the name</param>
+        /// <returns>The <see cref="GameObject"></see> that was found. <see langword="null"></see> if it couldn't be found.</returns>
         public static GameObject IfNullFind(GameObject obj, string objPath)
         {
             return obj != null ? obj : GameObject.Find(objPath);

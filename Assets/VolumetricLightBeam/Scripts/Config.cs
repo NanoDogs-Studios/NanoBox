@@ -1,9 +1,12 @@
 ﻿#if UNITY_EDITOR
 //#define PROFILE_INSTANCE_LOADING
 using UnityEditor;
+using UnityEditor.Build;
+
 #endif
 using UnityEngine;
 using UnityEngine.Serialization;
+using static EasyRoads3Dv3.ERMeshCombineUtility;
 
 #if VLB_URP
 using UnityEngine.Rendering.Universal;
@@ -439,23 +442,41 @@ namespace VLB
         }
 
 #if UNITY_EDITOR
+
         [InitializeOnLoadMethod]
         static void OnProjectLoadedInEditor()
         {
-            // Code executed on Unity Editor startup
-            // use the static variable and NOT the Instance property to prevent from creating a Config instance right away when you unpack the plugin,
-            // otherwise other assets (noise texture...) might not be loaded and references can be broken
-            if (ms_Instance)
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
+                return;
+
+            if (!ms_Instance)
+             return;
+
+            // Only apply if needed
+            if (!HasDefine("VLB_BUILTIN"))
+            {
                 ms_Instance.SetScriptingDefineSymbolsForCurrentRenderPipeline();
+            }
         }
 
         public void SetScriptingDefineSymbolsForCurrentRenderPipeline()
         {
             SRPHelper.SetScriptingDefineSymbolsForRenderPipeline(renderPipeline);
         }
+
+
+        static bool HasDefine(string define)
+        {
+            var target = EditorUserBuildSettings.selectedBuildTargetGroup;
+            var targetTarget = NamedBuildTarget.FromBuildTargetGroup(target);
+            var defines = PlayerSettings.GetScriptingDefineSymbols(targetTarget);
+            return defines.Contains(define);
+        }
+
 #endif
 
-        public void Reset()
+
+    public void Reset()
         {
             geometryOverrideLayer = Consts.Config.GeometryOverrideLayerDefault;
             geometryLayerID = Consts.Config.GeometryLayerIDDefault;
