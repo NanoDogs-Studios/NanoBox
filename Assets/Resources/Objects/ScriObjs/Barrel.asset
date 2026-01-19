@@ -15,5 +15,7 @@ MonoBehaviour:
   ObjName: Barrel
   icon: {fileID: 0}
   materialType: 1
-  Tags: Nanodogs, Indestructible
+  Tags:
+  - Nanodogs
+  - Indestructible
   category: 0
