@@ -7,5 +7,6 @@ namespace Nanodogs.Nanobox.Core
     {
         public string mapName;
         public Sprite mapImage;
+        public NbMap map;
     }
 }
