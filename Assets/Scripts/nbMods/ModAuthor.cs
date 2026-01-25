@@ -17,10 +17,17 @@ namespace Nanodogs.Nanobox.Mod
 
         [Header("All of the authors social links go here for credit purposes.")]
         // All of the authors social links go here for credit purposes.
-        public string[] authorSocialLinks;
+        public string[] AuthorSocialLinks;
 
         [Header("This is the author's main link. for example, a Linktree or Sitee link would go here.")]
         // This is the author's main link. for example, a Linktree or Sitee link would go here.
-        public string authorMainLink;
+        public string AuthorMainLink;
+
+        public ModAuthor()
+        {
+            AuthorName = "Unknown Author";
+            AuthorSocialLinks = new string[] { };
+            AuthorMainLink = "https://example.com";
+        }
     }
 }
