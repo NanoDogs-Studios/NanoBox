@@ -1,10 +1,13 @@
 ﻿<Solution>
   <Project Path="Obi.csproj" />
+  <Project Path="Modio.Unity.UI.csproj" />
+  <Project Path="Modio.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="MagicaClothV2.csproj" />
   <Project Path="Obi.Editor.csproj" />
   <Project Path="PhotonRealtime.csproj" />
   <Project Path="Heathen.Steamworks.csproj" />
+  <Project Path="Modio.Unity.Editor.csproj" />
   <Project Path="MagicaClothV2.Editor.csproj" />
   <Project Path="PhotonUnityNetworking.Editor.csproj" />
   <Project Path="PhotonUnityNetworking.csproj" />
@@ -12,10 +15,21 @@
   <Project Path="Nanodogs.NanoBox.Scripts.csproj" />
   <Project Path="PhotonUnityNetworking.Demos.csproj" />
   <Project Path="PhotonUnityNetworking.Utilities.csproj" />
+  <Project Path="Modio.Unity.csproj" />
+  <Project Path="Modio.Unity.UI.Editor.csproj" />
+  <Project Path="Modio.Unity.Platforms.Ios.csproj" />
+  <Project Path="Modio.Unity.Platforms.MobilePurchasing.csproj" />
   <Project Path="Heathen.Steamworks.Editor.csproj" />
   <Project Path="PunDemos.DemoHubEditor.csproj" />
   <Project Path="PunDemos.DemoSlotcarEditor.csproj" />
   <Project Path="PhotonChat.csproj" />
+  <Project Path="Modio.Unity.Examples.csproj" />
+  <Project Path="Modio.Unity.Platforms.Android.csproj" />
   <Project Path="PhotonUnityNetworking.Utilities.PhotonPlayer.Editor.csproj" />
+  <Project Path="Modio.Unity.Examples.Android.csproj" />
+  <Project Path="Modio.Unity.Examples.MobilePurchasing.csproj" />
+  <Project Path="Modio.Unity.Examples.Ios.csproj" />
   <Project Path="PhotonUnityNetworking.Utilities.Culling.Editor.csproj" />
+  <Project Path="Modio.Unity.Examples.Google.csproj" />
+  <Project Path="Modio.Unity.Platforms.Google.csproj" />
 </Solution>

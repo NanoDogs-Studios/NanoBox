@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Nanodogs.Nanobox.Core
 {
+    [Serializable]
     public class NbPlayerModel
     {
     }

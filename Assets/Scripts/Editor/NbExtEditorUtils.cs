@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEditor;
 
-namespace Nanodogs.Nanobox.Mod.Editor
+namespace Nanodogs.Nanobox.Mod
 {
     public static class NbExtEditorUtils
     {
