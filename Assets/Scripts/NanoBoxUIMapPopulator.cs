@@ -1,4 +1,5 @@
 using Nanodogs.Nanobox.Core;
+using Nanodogs.Nanobox.Map;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

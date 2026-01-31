@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a395eb03b017c84599447291ed144e9, type: 3}
+  m_Name: nb_infinitegrass
+  m_EditorClassIdentifier: Nanodogs.NanoBox.Scripts::Nanodogs.Nanobox.Core.NbMapItem
+  mapName: nb_infinitegrass
+  mapImage: {fileID: 0}
+  map:
+    mapItem: {fileID: 11400000}
+    spawnPlatformLocation: {fileID: 0}
+    map:
+      m_Handle: 0

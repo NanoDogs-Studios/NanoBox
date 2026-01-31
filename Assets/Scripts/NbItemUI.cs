@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Nanodogs.Nanobox.Core
+namespace Nanodogs.Nanobox.Map
 {
     [CreateAssetMenu(fileName = "Map Item", menuName = "Nanodogs/Nanobox/Map Item")]
     public class NbMapItem : ScriptableObject

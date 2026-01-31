@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using Nanodogs.Nanobox.Core;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Nanodogs.Nanobox.Core
+namespace Nanodogs.Nanobox.Map
 {
     [System.Serializable]
     public class NbMap
@@ -9,10 +10,7 @@ namespace Nanodogs.Nanobox.Core
         // MUST be set.
         public NbMapItem mapItem;
 
-        // usually located at 0,0,0
-        public Transform spawnPlatformLocation;
-
         // the actual scene of the map.
-        public Scene map;
+        public NbScene mapScene;
     }
 }
