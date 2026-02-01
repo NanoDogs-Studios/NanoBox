@@ -56,7 +56,7 @@ namespace Nanodogs.Nanobox.UI
             while (!codeEntered)
                 await Task.Yield();
     
-            return authInput.text;
+            return codeInput.text;
         }
    
         void OnAuth()
