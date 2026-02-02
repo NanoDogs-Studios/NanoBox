@@ -1,0 +1,20 @@
+{
+    "name": "UI",
+    "rootNamespace": "Nanodogs.Nanobox",
+    "references": [
+        "GUID:cf54f91a42894c249a9644ac6b98c1b6",
+        "GUID:89977ecf69833854bbcfbfe557574d93",
+        "GUID:db6222d9311edce7487ad4ef8dce647f",
+        "GUID:cd96cc3c51badf70e835220840c5842b",
+        "GUID:96ddd290cb735a823b64159a939b6d5f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
