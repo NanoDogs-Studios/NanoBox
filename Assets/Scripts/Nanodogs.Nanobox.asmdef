@@ -1,11 +1,14 @@
 {
-    "name": "Core",
+    "name": "Nanodogs.Nanobox",
     "rootNamespace": "Nanodogs.Nanobox",
     "references": [
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:cf54f91a42894c249a9644ac6b98c1b6",
+        "GUID:89977ecf69833854bbcfbfe557574d93",
         "GUID:831409e8f9d13b5479a3baef9822ad34",
         "GUID:57c32fc907df0f54e8e6e8f0d2488336",
-        "GUID:6055be8ebefd69e48b49212b09b47b2f",
-        "GUID:17a555191fac9170ca92f7e37008c3d6"
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:3893c36bbfeab6744bf8098a677f3a9e"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
